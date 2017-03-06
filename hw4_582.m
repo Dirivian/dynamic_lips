@@ -55,9 +55,9 @@ Xsparse(:,j) = X_sparse(:,recon);
 test1 = Xsparse(:,j); 
 test1 = uint8(real(test1));
 avg = mean(test1); 
-shrinkcut = 1;
+shrinkcut = 1; %can mess with this
 test1(test1<shrinkcut*avg) = .1*test1(test1<shrinkcut*avg);
-growcut = 1;
+growcut = 1; %can mess with this
 test1(test1>growcut*avg) = 5*test1(test1>growcut*avg);
  Xsparse(:,j) = test1; 
 
@@ -65,6 +65,11 @@ Xlowrank(:,j) = X_lowrank(:,recon);
 % Xsparsereshape(:,:,j) = uint8(reshape(Xsparse(:,j),aa1,bb1));
 % Xsparsereshape(:,:,j) = imadjust(Xsparsereshape(:,:,j),[.4,.6]);
 Xsparsereshape(:,:,j) = uint8(reshape(Xsparse(:,j),aa1,bb1)).*mask_initial; 
+
+%note: if want:
+%can make it so we get full reconstruction by taking more frames for
+%intial/last reconstruction 
+
 end
 lipread(i).sparse = Xsparsereshape; 
 

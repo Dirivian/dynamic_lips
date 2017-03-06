@@ -26,8 +26,8 @@ vidFrames = read(obj);
 lipread(i).name = movie_list(i).name; 
 lipread(i).mov = vidFrames; 
 %optional outputs
-%lipread(i).ACmask = zeros(X,Y,numFrames); 
-%lipread(i).graymov = uint8(zeros(X,Y,numFrames)); 
+%lipread(i).ACmask = zeros(X,Y,numFrames);  %active contour
+%lipread(i).graymov = uint8(zeros(X,Y,numFrames));  %save grayscale movie
 lipread(i).edge = uint8(zeros(X,Y,numFrames)); 
 lipread(i).mask = zeros(74,4);
 
@@ -58,13 +58,13 @@ for j=1:numFrames %do the processing
 
     currentgrayscale = rgb2gray(currentframe); 
     
-    %lipread(i).graymov(:,:,j) = currentgrayscale; 
+    %lipread(i).graymov(:,:,j) = currentgrayscale; %save grayscale movie
     
     %AC code below (not good)
 %     mask = activecontour(currentgrayscale,mask_initial,200,'edge'); 
 %     lipread(i).ACmask(:,:,j) = mask; 
 
-%code to increase contrast of part of image (doesn't work) 
+%code to increase contrast of part of image (doesn't improve results: youll detect the edges of box) 
 % curim = currentgrayscale;
 % curim = curim(aa:bb,cc:dd);
 % curim = imadjust(curim); 
