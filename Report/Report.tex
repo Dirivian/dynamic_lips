@@ -89,23 +89,59 @@
 \section{Theoretical Background}
 \label{sec:theory}
 
+\section{Hidden Markov Models}
 
+A Markov model involves the transition of a particular state to other states based on transition probabilities. A future state is only depends on the current state and not the states before it. Now, consider that at every state, there would be real world observations. These observations are controlled by the emission probabilities at each state.
+
+For example, if we were to represent the ever changing weather, the states would be sunny, rainy or snowing and the observations would be summer clothes, rain boots or snow shoes. We can see that the emission probabilities for each observation is different depending on the state. To be more clear, the emission probabilities depend on the states.
+
+We look at Hidden Markov Models(HMM). We decide that this is a relevant model because the words spoken are those defined by language and thus occur in specific pattern and not randomly. For example, given the first letter of word 'k', the probability that the next letter is a vowel is much higher than it being a consonant. A machine learning algorithm without this would be as inefficient as the initial Enigma machine in the movie "The Imitation Game". HMMs are very popular in the fields of speech \cite{key-2} and gesture recognition \cite{key-4} \cite{key-5}.
+
+Although HMMs have fascinating problems related to evaluation and learning, our interests are in decoding. We have a sequence of observations and our aim is to estimate the states that created that. The Viterbi algorithm \cite{key-3} gives us the states that maximize the occurrence of the observations. 
+
+So, given the features from the videos, we find the states. The states are the units of words, here chosen to be phonemes. 
 \section{Implementation and Development}
 
+\subsection{Extracting Phonemes}
+
+Using the nltk library in Python, we convert every word to its constitutive arpabet phonetics using \ref{Ph.py}. It gives the following output for the words - f', 'see', 'sea', 'compute', 'comput', 'cat'. Only 'comput' fails because it isn't a real word
+\begin{verbatim}
+['EH1', 'F']
+['S', 'IY1']
+['S', 'IY1']
+['K', 'AH0', 'M', 'P', 'Y', 'UW1', 'T']
+'comput'
+['K', 'AE1', 'T']
+\end{verbatim}
 
 
+\section{Jobs}
+
+This section is where we see the stuff to do.
+
+\begin{itemize}
+	\item Getting the transition probabilities between phonemes- I'll do that next
+	\item Getting a feature space for each phoneme.
+	\item Code to extract all the output from the subtitles file.
+	\item Something with nnets.
+\end{itemize}
 
 \section{Computational Results}
 
 \section{Summary and Conclusions}
 
+Further step and modifications.
+
 
 
 \begin{thebibliography}{1}
 	\bibitem{key-1}J. Proctor, S. Brunton and J. N. Kutz, Dynamic mode decomposition with control, arXiv:1409.6358.
+	\bibitem{key-2}Rabiner, Lawrence R. "A tutorial on hidden Markov models and selected applications in speech recognition." Proceedings of the IEEE 77.2 (1989): 257-286.	
+	\bibitem{key-3}Forney, G. David. "The viterbi algorithm." Proceedings of the IEEE 61.3 (1973): 268-278.
 	
-	\bibitem{key-2}J. Grosek and J. N. Kutz, Dynamic mode decomposition for real-time background/foreground separation in video, arXiv:1404.7592.
-	
+	\bibitem{key-4}Yang, Jie, and Yangsheng Xu. Hidden markov model for gesture recognition. No. CMU-RI-TR-94-10. CARNEGIE-MELLON UNIV PITTSBURGH PA ROBOTICS INST, 1994.
+
+	\bibitem{key-5}Starner, Thad E. Visual Recognition of American Sign Language Using Hidden Markov Models. MASSACHUSETTS INST OF TECH CAMBRIDGE DEPT OF BRAIN AND COGNITIVE SCIENCES, 1995.
 	
 
 \end{thebibliography}
@@ -116,16 +152,11 @@
 %dummy comment inserted by tex2lyx to ensure that this paragraph is not empty
 
 
-\section{MATLAB Functions used}
-\begin{itemize}
-\item \textbf{[U,S,V]=svd(A): } \\ This function performs the singular value decomposition of A and returns U,S and V.
-\item \textbf{mat2gray(A): } \\ This function converts a matrix to greyscale.
 
-\end{itemize}
 
 \section{MATLAB Code}
 
-\subsection{hw4.m}
+\subsection{Contours.m}
 \begin{lstlisting}[style=myMatlabstyle]
 obj=VideoReader('vid1.mpg');
 vidFrames = read(obj);
@@ -143,4 +174,19 @@ BWs = edge(A,'sobel', threshold * fudgeFactor);
 figure, imshow(BWs), title('binary gradient mask');
 \end{lstlisting}
 
+\section{Python Code}
+
+\subsection{Phonemes.py}
+\label{Ph.py}
+\begin{lstlisting}[style=myPythonstyle]
+import nltk
+
+arpabet = nltk.corpus.cmudict.dict()
+
+for word in ('f', 'see', 'sea', 'compute', 'comput', 'cat'):
+		try:
+			print(arpabet[word][0])
+		except Exception as e:
+			print(e)
+\end{lstlisting}
 \end{document}
