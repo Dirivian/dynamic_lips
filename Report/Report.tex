@@ -104,7 +104,7 @@ So, given the features from the videos, we find the states. The states are the u
 
 \subsection{Extracting Phonemes}
 
-Using the nltk library in Python, we convert every word to its constitutive arpabet phonetics using \ref{Ph.py}. It gives the following output for the words - f', 'see', 'sea', 'compute', 'comput', 'cat'. Only 'comput' fails because it isn't a real word
+Using the nltk library in Python, we convert every word to its constitutive arpabet phonetics. It gives the following output for the words - f', 'see', 'sea', 'compute', 'comput', 'cat'. Only 'comput' fails because it isn't a real word
 \begin{verbatim}
 ['EH1', 'F']
 ['S', 'IY1']
@@ -114,6 +114,13 @@ Using the nltk library in Python, we convert every word to its constitutive arpa
 ['K', 'AE1', 'T']
 \end{verbatim}
 
+From the words spoken in our videos, we get a set of 36 unique phonemes. The code for this is shown in using \ref{Ph.py} The 36 unique phonemes are 
+
+\begin{verbatim}
+'AA1', 'AE1', 'AH0', 'AH1', 'AO1', 'AW1', 'AY1', 'B', 'CH', 'D', 'DH', 'EH1', 'EY1', 'F', 
+ 'G', 'IH0', 'IH1', 'IY1', 'JH', 'K', 'L', 'M', 'N', 'OW0', 'OW1', 'P', 'R', 'S', 'T',
+  'TH', 'UW0', 'UW1', 'V', 'W', 'Y', 'Z
+\end{verbatim}
 
 \section{Jobs}
 
