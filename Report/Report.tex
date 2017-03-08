@@ -122,6 +122,10 @@ From the words spoken in our videos, we get a set of 36 unique phonemes. The cod
   'TH', 'UW0', 'UW1', 'V', 'W', 'Y', 'Z
 \end{verbatim}
 
+\subsection{Extracting Transcripts}
+
+From the transcripts, we extract all the data into a csv file using \ref{Transcripts.py}
+
 \section{Jobs}
 
 This section is where we see the stuff to do.
@@ -200,5 +204,21 @@ for word in ('f', 'see', 'sea', 'compute', 'comput', 'cat'):
 			print(arpabet[word][0])
 		except Exception as e:
 			print(e)
+\end{lstlisting}
+\subsection{Transcripts.py}
+\label{Transcripts.py}
+\begin{lstlisting}[style=myPythonstyle]
+import csv
+import os
+os.chdir("align")
+beach = os.listdir()
+with open("tes.csv", "w") as f:
+	for sand in beach[:-1]:
+		text_file = open(sand, "r")
+		lines = text_file.read().split(',')
+		k = lines[0]
+		g = k.split()
+		writer = csv.writer(f)
+		writer.writerow(g)
 \end{lstlisting}
 \end{document}

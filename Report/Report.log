@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.7.18)  6 MAR 2017 20:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.7.18)  7 MAR 2017 22:04
 entering extended mode
 **Report.tex
 (Report.tex
@@ -793,26 +793,14 @@ Overfull \hbox (3.36516pt too wide) in paragraph at lines 123--123
 'OW1', 'P', 'R', 'S', 'T',[] 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 130.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 134.
 
 (G:\MiTeX\tex\latex\base\omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 134.
  [2] [3]
-
-Package xcolor Warning: Incompatible color definition on input line 173.
-
-
-Package xcolor Warning: Incompatible color definition on input line 174.
-
-
-Package xcolor Warning: Incompatible color definition on input line 175.
-
-
-Package xcolor Warning: Incompatible color definition on input line 176.
-
 
 Package xcolor Warning: Incompatible color definition on input line 177.
 
@@ -840,17 +828,29 @@ Package xcolor Warning: Incompatible color definition on input line 184.
 
 Package xcolor Warning: Incompatible color definition on input line 185.
 
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 185.
 
 Package xcolor Warning: Incompatible color definition on input line 186.
 
+
+Package xcolor Warning: Incompatible color definition on input line 187.
+
+
+Package xcolor Warning: Incompatible color definition on input line 188.
+
+
+Package xcolor Warning: Incompatible color definition on input line 189.
+
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 189.
+
+Package xcolor Warning: Incompatible color definition on input line 190.
+
 [4] (Report.aux) ) 
 Here is how much of TeX's memory you used:
- 15730 strings out of 493698
- 283549 string characters out of 3152098
- 431554 words of memory out of 3000000
- 18770 multiletter control sequences out of 15000+200000
+ 15746 strings out of 493698
+ 283706 string characters out of 3152098
+ 440564 words of memory out of 3000000
+ 18786 multiletter control sequences out of 15000+200000
  9430 words of font info for 35 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  62i,6n,92p,586b,1776s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -862,7 +862,7 @@ mr5.pfb><G:/MiTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><G:/MiTeX/fonts/type1
 /public/amsfonts/cm/cmsy10.pfb><G:/MiTeX/fonts/type1/public/amsfonts/cm/cmsy8.p
 fb><G:/MiTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><G:/MiTeX/fonts/type1/pu
 blic/amsfonts/cm/cmtt9.pfb>
-Output written on Report.pdf (4 pages, 176998 bytes).
+Output written on Report.pdf (4 pages, 178556 bytes).
 PDF statistics:
  64 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
