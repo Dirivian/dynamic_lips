@@ -39,8 +39,8 @@ back_j = find(omega_back);
 
 X_lowrank = zeros(aa1*bb1,size(X1_1,2)); 
 t = (0:size(X1_1,2)-1)*dt; 
-for i=1:length(back_j)
-    ind = back_j(i);
+for z=1:length(back_j)
+    ind = back_j(z);
     X_lowrank = X_lowrank+b(ind)*phi(:,ind)*exp(omega(ind).*t);
 end
 X_sparse = X_dmd-abs(X_lowrank); 

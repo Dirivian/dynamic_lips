@@ -11,7 +11,7 @@ numFiles = length(movie_list);
 % mask_initial(aa:bb,cc:dd) = 1; 
 % mask_initial = uint8(mask_initial); 
 
-goodmov = 1:1000;
+goodmov = 2:3; %movies you want
 MouthDetect = vision.CascadeObjectDetector('Mouth','MergeThreshold',16); 
 
 lipread(length(goodmov)).mov = uint8(zeros(268,368,3,74));
@@ -25,9 +25,10 @@ vidFrames = read(obj);
 [X,Y,three,numFrames] = size(vidFrames); 
 lipread(i).name = movie_list(i).name; 
 lipread(i).mov = vidFrames; 
-%optional outputs
+%optional outputs below
 %lipread(i).ACmask = zeros(X,Y,numFrames);  %active contour
 %lipread(i).graymov = uint8(zeros(X,Y,numFrames));  %save grayscale movie
+%optional outputs above
 lipread(i).edge = uint8(zeros(X,Y,numFrames)); 
 lipread(i).mask = zeros(74,4);
 
@@ -46,7 +47,7 @@ for j=1:numFrames %do the processing
         index=1;
     end
     if size(BB,1) ==0
-        disp('Could Not Detect Mouth Region')
+        disp('Could Not Detect Mouth Region') %no results if you get this
         continue
     end
     lipread(i).mask(j,:) = BB(index,:); %field for mask coordinates
@@ -58,12 +59,16 @@ for j=1:numFrames %do the processing
 
     currentgrayscale = rgb2gray(currentframe); 
     
+    %if need grayscale uncomment next line 
     %lipread(i).graymov(:,:,j) = currentgrayscale; %save grayscale movie
+    %(need graymov for DMD and AC)
     
     %AC code below (not good)
-%     mask = activecontour(currentgrayscale,mask_initial,200,'edge'); 
-%     lipread(i).ACmask(:,:,j) = mask; 
-
+     %mask = activecontour(currentgrayscale,mask_initial,500,'edge');
+     %lipread(i).ACmask(:,:,j) = mask; 
+%AC code above
+     
+     
 %code to increase contrast of part of image (doesn't improve results: youll detect the edges of box) 
 % curim = currentgrayscale;
 % curim = curim(aa:bb,cc:dd);
@@ -103,6 +108,7 @@ end
 end
 cd(parent_dir) 
 %hw4_582 %if you want DMD (takes longer, not very good)
+final582_color
 
 
 %can try doing the color classification. (in lab colorspace)
