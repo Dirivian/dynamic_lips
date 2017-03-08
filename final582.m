@@ -1,4 +1,8 @@
-clear all; %close all;
+%note: backup = backup2
+%clear all;
+function [lipread] = final582(goodmov,usegray,useAC,useedge,useDMD)
+
+ %close all;
 parent_dir = 'C:\Users\Pc\Documents\MATLAB\final 582'; %parent directory
 target_dir = 's1'; %folder with movies to process
 cd(target_dir); %change to target folder
@@ -11,7 +15,7 @@ numFiles = length(movie_list);
 % mask_initial(aa:bb,cc:dd) = 1; 
 % mask_initial = uint8(mask_initial); 
 
-goodmov = 2:3; %movies you want
+%goodmov = 2:3; %movies you want
 MouthDetect = vision.CascadeObjectDetector('Mouth','MergeThreshold',16); 
 
 lipread(length(goodmov)).mov = uint8(zeros(268,368,3,74));
@@ -26,10 +30,16 @@ vidFrames = read(obj);
 lipread(i).name = movie_list(i).name; 
 lipread(i).mov = vidFrames; 
 %optional outputs below
-%lipread(i).ACmask = zeros(X,Y,numFrames);  %active contour
-%lipread(i).graymov = uint8(zeros(X,Y,numFrames));  %save grayscale movie
+if useAC ==1
+lipread(i).ACmask = zeros(X,Y,numFrames);  %active contour
+end
+if usegray ==1
+lipread(i).graymov = uint8(zeros(X,Y,numFrames));  %save grayscale movie
+end
 %optional outputs above
+if useedge ==1
 lipread(i).edge = uint8(zeros(X,Y,numFrames)); 
+end
 lipread(i).mask = zeros(74,4);
 
 
@@ -60,12 +70,16 @@ for j=1:numFrames %do the processing
     currentgrayscale = rgb2gray(currentframe); 
     
     %if need grayscale uncomment next line 
-    %lipread(i).graymov(:,:,j) = currentgrayscale; %save grayscale movie
+    if usegray==1
+    lipread(i).graymov(:,:,j) = currentgrayscale; %save grayscale movie
+    end
     %(need graymov for DMD and AC)
     
     %AC code below (not good)
-     %mask = activecontour(currentgrayscale,mask_initial,500,'edge');
-     %lipread(i).ACmask(:,:,j) = mask; 
+    if useAC ==1
+     mask = activecontour(currentgrayscale,mask_initial,500,'edge');
+     lipread(i).ACmask(:,:,j) = mask; 
+    end
 %AC code above
      
      
@@ -77,6 +91,7 @@ for j=1:numFrames %do the processing
 
 
 %currentgrayscale = imadjust(currentgrayscale,[.2,.8]); %can mess with this
+if useedge ==1
 threshfac = 9; %can mess with this
 [~,threshold] = edge(currentgrayscale,'Canny');  %canny is best? 
 mask = edge(currentgrayscale,'Canny',threshfac*threshold); %can mess with this
@@ -102,13 +117,15 @@ k = find(currentedge);
     end
     %counter
     lipread(i).edge(:,:,j) = currentedge; 
+end
 
 
 end
 end
 cd(parent_dir) 
-%hw4_582 %if you want DMD (takes longer, not very good)
-final582_color
+if useDMD ==1
+hw4_582 %if you want DMD (takes longer, not very good)
+end
 
-
+end
 %can try doing the color classification. (in lab colorspace)

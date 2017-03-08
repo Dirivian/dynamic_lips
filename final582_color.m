@@ -1,13 +1,14 @@
-clearvars -except lipread
+function [lipcolor] = final582_color(lipread)
+%clearvars -except lipread
 cform = makecform('srgb2lab');
-lipcolor = uint8(zeros(268,368,74,length(lipread)));
+lipcolor = zeros(288,368,74,length(lipread),'uint8');
 for i=1:length(lipread)
     
     
     for j = 1:74
         
         myBB = lipread(i).mask(j,:);
-        colormask=uint8(zeros(268,368));
+        colormask=uint8(zeros(288,368));
         
 %          mask_initial = zeros(288,368,3);
 %     mask_initial(myBB(2):myBB(2)+myBB(4),myBB(1):myBB(1)+myBB(3),1:3) = 1;
@@ -25,6 +26,7 @@ end
         ab = reshape(ab,nrows*ncols,2); 
         
         nColors = 4; %number of clusters
+        %maybe add some code to decide how many clusters to use? 
         
         [cluster_idx, cluster_center] = kmeans(ab,nColors,'distance','sqEuclidean', ...
             'Replicates',3); %get 4 clusters, repeat 3 times. use square euclidean distance.
@@ -38,7 +40,7 @@ end
        pixel_labels(pixel_labels~=lipindex) = 0;
        pixel_labels = pixel_labels/lipindex;
        colormask(myBB(2):myBB(2)+myBB(4),myBB(1):myBB(1)+myBB(3)) = pixel_labels;
-       lipcolor(:,:,j,i) = colormask(1:268,:); 
+       lipcolor(:,:,j,i) = colormask; 
       
 %        segmented_images = cell(1,nColors);
 %        rgb_label = repmat(pixel_labels,[1 1 3]);
