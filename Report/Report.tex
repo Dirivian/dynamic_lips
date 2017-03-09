@@ -114,12 +114,66 @@ Using the nltk library in Python, we convert every word to its constitutive arpa
 ['K', 'AE1', 'T']
 \end{verbatim}
 
-From the words spoken in our videos, we get a set of 36 unique phonemes. The code for this is shown in using \ref{Ph.py} The 36 unique phonemes are 
+From the words spoken in our videos, we get a set of 36 unique phonemes. The code for this is shown in using \ref{Ph.py} The 37 unique phonemes are 
 
 \begin{verbatim}
-'AA1', 'AE1', 'AH0', 'AH1', 'AO1', 'AW1', 'AY1', 'B', 'CH', 'D', 'DH', 'EH1', 'EY1', 'F', 
- 'G', 'IH0', 'IH1', 'IY1', 'JH', 'K', 'L', 'M', 'N', 'OW0', 'OW1', 'P', 'R', 'S', 'T',
-  'TH', 'UW0', 'UW1', 'V', 'W', 'Y', 'Z
+{'R', 'F', 'IH0', 'N', 'AA1', 'IY1', 'OW0', 'EH1', 'G', 'HH', 'DH', 'M', 'OW1', 'V', 'JH', 'IH1', 'AH1', 'B', 'AE1', 'UW0', 'P', 'AH0', 'EY1', 'AY1', 'W', 'UW1', 'K', 'S', 'L', 'AW1', 'Y', 'Z', 'D', 'T', 'AO1', 'CH', 'TH'}
+\end{verbatim}
+
+The list of words and the phonemes in them are given by
+\begin{verbatim}
+a :AH0 EY1
+b :B IY1
+c :S IY1
+d :D IY1
+e :IY1
+f :EH1 F
+g :JH IY1
+h :EY1 CH
+i :AY1
+j :JH EY1
+k :K EY1
+l :EH1 L
+m :EH1 M
+n :EH1 N
+o :OW1
+p :P IY1
+q :K Y UW1
+r :AA1 R
+s :EH1 S
+t :T IY1
+u :Y UW1
+v :V IY1
+w :D AH1 B AH0 L Y UW0
+x :EH1 K S
+y :W AY1
+z :Z IY1
+again :AH0 G EH1 N AH0 G EY1 N
+soon :S UW1 N
+now :N AW1
+please :P L IY1 Z
+bin :B IH1 N
+lay :L EY1
+place :P L EY1 S
+set :S EH1 T
+blue :B L UW1
+green :G R IY1 N
+red :R EH1 D
+white :W AY1 T HH W AY1 T
+at :AE1 T
+by :B AY1
+with :W IH1 DH W IH1 TH W IH0 TH W IH0 DH
+in :IH0 N IH1 N
+zero :Z IH1 R OW0 Z IY1 R OW0
+one :W AH1 N HH W AH1 N
+two :T UW1
+three :TH R IY1
+four :F AO1 R
+five :F AY1 V
+six :S IH1 K S
+seven :S EH1 V AH0 N
+eight :EY1 T
+nine :N AY1 N
 \end{verbatim}
 
 \subsection{Extracting Transcripts}
@@ -198,12 +252,19 @@ figure, imshow(BWs), title('binary gradient mask');
 import nltk
 
 arpabet = nltk.corpus.cmudict.dict()
-
-for word in ('f', 'see', 'sea', 'compute', 'comput', 'cat'):
-		try:
-			print(arpabet[word][0])
-		except Exception as e:
-			print(e)
+k =[j for j in 'abcdefghijklmnopqrstuvwxyz']
+t= ['again', 'soon', 'now', 'please','bin', 'lay', 'place','set', 'blue', \
+ 'green','red','white' ,'at','by', 'with', 'in', 'zero','one', 'two',\
+ 'three','four','five','six','seven','eight','nine'];
+g = k+t
+ph =[]
+for word in g:
+	wl =arpabet[word]
+	myString = ' '.join(str(r) for v in wl for r in v)
+	print( word+' :'+ myString)
+	for w in wl:
+		ph = ph +w
+uniqueph = set(ph)
 \end{lstlisting}
 \subsection{Transcripts.py}
 \label{Transcripts.py}

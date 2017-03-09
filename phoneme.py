@@ -13,6 +13,9 @@ t= ['again', 'soon', 'now', 'please','bin', 'lay', 'place','set', 'blue', 'green
 g = k+t
 ph =[]
 for word in g:
-        w =arpabet[word][0]
-        ph = ph +w
+        wl =arpabet[word]
+        myString = ' '.join(str(r) for v in wl for r in v)
+        print( word+' :'+ myString)
+        for w in wl:
+            ph = ph +w
 uniqueph = set(ph)
