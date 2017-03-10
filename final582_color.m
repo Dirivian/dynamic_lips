@@ -29,7 +29,7 @@ end
         %maybe add some code to decide how many clusters to use? 
         
         [cluster_idx, cluster_center] = kmeans(ab,nColors,'distance','sqEuclidean', ...
-            'Replicates',3); %get 4 clusters, repeat 3 times. use square euclidean distance.
+            'Replicates',3,'EmptyAction','drop'); %get 4 clusters, repeat 3 times. use square euclidean distance.
         [~,lipindex] = max(cluster_center(:,1)); 
         [~,lipindex2] = min(cluster_center(:,2));
         if lipindex ~=lipindex2
