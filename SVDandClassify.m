@@ -12,6 +12,9 @@
 
 %Begin Script:
 
+%load lipread 
+%lipread = rmfield(lipread,'mov');
+%load words_and_frameLocs
 %% Crop, Assign Labels, create individual data matrices
 
 %Crop videos based on contour mask

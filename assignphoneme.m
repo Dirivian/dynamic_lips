@@ -6,7 +6,7 @@ function out = assignphoneme(in)
 %output: out = vector of phonemes
 %
 %Begin Function:
-
+out = [];
 %Check which word input is and return appropriate phonemes
 if strcmp(in,'a'); out = cellstr(['AHO';'EYI']); end
 if strcmp(in,'b'); out = cellstr(['B  ';'IY1']); end
@@ -63,7 +63,8 @@ if strcmp(in,'nine'); out = cellstr(['N  ';'AY1';'N  ']); end
 if strcmp(in,'sil'); out = cellstr('SIL'); end
 
 %return numeric 0 if input doesnt match anything
-if isempty(out); out = 0; end
+if isempty(out); out = num2cell(0); end
+
 
 end
 

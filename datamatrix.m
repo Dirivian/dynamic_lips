@@ -29,6 +29,9 @@ for j = 1:length(cropVid)
             %this phoneme is a regular phoneme:
             
             %Increment to store in right place
+            if thisInd <1
+                thisInd = 1;
+            end
             ind(thisInd) = ind(thisInd) + 1;
             
             %Get Frame to store

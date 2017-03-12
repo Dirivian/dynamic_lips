@@ -10,7 +10,10 @@ function [out] = lipcrop(lipread)
 %
 
 for j = length(lipread):-1:1
+    
+        
     m = lipread(j).mask;
+
     xmin = m(:,1);
     ymin = m(:,2);
     xmax = m(:,1)+m(:,3);
@@ -21,10 +24,35 @@ for j = length(lipread):-1:1
     cropymax(j) = max(ymax);
 end
 
+test2 = cropxmin;
+test2(cropxmin~=0) = 0;
+test2(cropxmin==0) = 1;
+zerofind = find(test2);
+
+for j = zerofind
+    m = lipread(j).mask;
+    for i = 1:74
+        if norm(m(i,:))==0
+            m(i,:) = m(40,:);
+        end
+    end
+    xmin = m(:,1);
+    ymin = m(:,2);
+    xmax = m(:,1)+m(:,3);
+    ymax = m(:,2)+m(:,4);
+    cropxmin(j) = min(xmin);
+    cropxmax(j) = max(xmax);
+    cropymin(j) = min(ymin);
+    cropymax(j) = max(ymax);
+end
+    
+
 cxmax = max(cropxmax);
 cxmin = min(cropxmin);
 cymax = max(cropymax);
 cymin = max(cropymin);
+
+
 
 x = cxmin:cxmax;
 y = cymin:cymax;
