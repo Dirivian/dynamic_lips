@@ -15,6 +15,17 @@
 %load lipread 
 %lipread = rmfield(lipread,'mov');
 %load words_and_frameLocs
+
+load lipcolorhalf1
+for i =1:500
+lipread(i).edge = lipcolor(:,:,:,i);
+end
+load lipcolorhalf2
+for i =501:1000
+    lipread(i).edge = lipcolor(:,:,:,i-500); 
+end
+
+clearvars -except lipread frameLocs words
 %% Crop, Assign Labels, create individual data matrices
 
 %Crop videos based on contour mask
