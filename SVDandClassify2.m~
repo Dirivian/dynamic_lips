@@ -32,7 +32,7 @@ clearvars -except lipread frameLocs words
 cropVid = lipcrop(lipread);
 
 %Assign labels to each frame
-labels = assignlabels(cropVid,frameLocs,words);
+labels = assignlabels2(cropVid,frameLocs,words);
 
 %Sort and create data arrays
 [Y,sizeData,SIL,sizeSil,numPix] = datamatrix(cropVid,labels);
@@ -86,9 +86,9 @@ for j = 1:size(uni,1)
     q1 = q(1:a) + uni(j,3)*ones(1,a);
     q2 = q(a+1:end) + uni(j,3)*ones(1,b);
     
-    train(n1:n1+a-1,:) = V(q1,1:5);
+    train(n1:n1+a-1,:) = V(q1,1:30);
     trainTags(n1:n1+a-1) = deal(uni(j,1));
-    test(n2:n2+b-1,:) = V(q2,1:5);
+    test(n2:n2+b-1,:) = V(q2,1:30);
     testTags(n2:n2+b-1,:) = deal(uni(j,1));
     
     n1 = n1 + a;
@@ -102,12 +102,22 @@ end
 nb = NaiveBayes.fit(train,trainTags);
 pre = nb.predict(test);
 
+knnind = knnsearch(train,test);
+acc2 = 100*sum(knnind==testTags)/length(knnind);
+
+
 %compute accuracy
 acc = 100*sum(pre==testTags)/length(pre);
 disp(['Accuracy was ' num2str(acc) '%'])
+disp(['Accuracy was ' num2str(acc2) '%'])
 
 
+%% HMM
 
-
+v = 1;
+for j = 1:length(cropVid)
+    thisVid = cropVid{j};
+    for k = 1:size(thisVid,3)
+        
 
 
