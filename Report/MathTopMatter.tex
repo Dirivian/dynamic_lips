@@ -1,0 +1,42 @@
+% always load these packages
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{graphicx,float}
+\usepackage{todonotes}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{nth}
+
+
+% reciprocal hyperbolic trigonometric functions
+\DeclareMathOperator\csch{csch}
+\DeclareMathOperator\sech{sech}
+
+% sign function
+\DeclareMathOperator\sign{sign}
+
+% more readable real part and imaginary part functions
+\renewcommand\Re{\mathrm{Re}}
+\renewcommand\Im{\mathrm{Im}}
+
+% matrix environment for vectors or matrices where elements are centered
+\newenvironment{mat}{\left(\begin{array}{ccccccccccccccc}}{\end{array}\right)}
+\newcommand\bcm{\begin{mat}}
+\newcommand\ecm{\end{mat}}
+
+% common sets of numbers
+\newcommand\reals{\mathbb{R}}
+\newcommand\complex{\mathbb{C}}
+\newcommand\ints{\mathbb{Z}}
+\newcommand\nats{\mathbb{N}}
+
+% other common symbols
+\newcommand\matlab{{\sc matlab}}
+\newcommand{\goto}{\rightarrow}
+\newcommand{\bigo}{{\mathcal O}}
