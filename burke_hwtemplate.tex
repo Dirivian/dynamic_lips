@@ -1,0 +1,86 @@
+  \documentclass{article}
+
+\input{C:/Users/sfzba/Documents/MathTopMatter.tex}
+
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+\usepackage{fullpage}
+
+\title{AMATH 568: Homework 1}
+\date{January \nth{13}, 2016}
+\author{Lee Burke (1622633)}
+
+\renewcommand{\thesection}{Problem \arabic{section}.}
+\renewcommand{\thesubsection}{\arabic{section} (\alph{subsection})}
+\renewcommand{\thesubsubsection}{\arabic{section} (\alph{subsection}) (\roman{subsubsection})}
+
+\begin{document}
+\maketitle
+%\listoftodos
+\section{}
+\subsection{}
+
+\begin{lstlisting}
+u = @(x) sin(x);
+f = @(x,h) (u(x+h)+u(x-h)-2*u(x))/h^2;
+x=pi/6;
+ref=-sin(x);
+table=[];
+for i=1:16
+    h   = 10^(-i);
+    val = f(x,h);
+    err = abs(val-ref);
+    table = [table; h val err];
+end
+\end{lstlisting}
+
+\begin{table}[H]
+	\centering
+	\caption{}
+	\begin{tabular}{c|c|c}
+	$h$ & $f(x)\approx u''(x)$ & $|f(x)-u''(x)|$ \\
+	\hline
+	$10^{-1}$ & -0.4995834721974 & 0.000416527802582 \\
+	\end{tabular}
+\end{table}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{file.f}
+	\caption{}
+\end{figure}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
