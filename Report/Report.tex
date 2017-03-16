@@ -61,7 +61,7 @@
 \usepackage[scale=0.75]{geometry}
 	\title{Estimating speech from lip movement}
 
-\author{Jithin D. George, Ronan Keane, Connor Zellmer}
+\author{Jithin D. George, Ronan Keane, Conor Zellmer}
 
 \date{\today}
 
@@ -89,7 +89,34 @@
 \section{Theoretical Background}
 \label{sec:theory}
 
-\section{Hidden Markov Models}
+
+\subsection{Phonemes and Visemes}
+Phonemes are the smallest identifiable sound unit in the sound system of a language. $^{[6]}$  According to Zhong, et al, phonemes are ``basic sound segments that carry linguistic distinction.''$^{[7]}$ In theory, visemes are the analogous basic units in the visual domain.  However, there is no agreement on a common definition for visemes in practice$^{[8]}$.  In audio speech recognition, phonemes are detected and used to reconstruct speech.  In visual speech recognition, only visemes can be detected.  Phonemes for the basis for a spoken language, and hence automated lipreading typically employs a mapping from phonemes to visemes.  Many such mapping can be found in the literature, but all suffer from the issue of there being more phonemes than visemes, resulting in a many-to-one map.$^{[8]}$  For instance, this project uses 37 phonemes and 11 visemes. See Table (\ref{tab:pv}) for the phoneme to viseme map used in this project.  
+
+\begin{table}[!hb]
+\center
+\caption{Phoneme to Viseme Map from Lee and York, 2000, via [8].}
+\begin{tabular}{l l l}
+\hline\hline\\
+Viseme Number & Viseme Label & Associated Phonemes\\
+ \hline
+1   & P      &  b p m \\ 
+2   & T      &  d t s z th dh\\
+3   & K      &   g k n l y hh\\
+4   & CH   &   jh ch\\
+5   & F      &   f v\\
+6   & W     &   r w\\
+7   & IY     &   iy ih\\
+8   & EH   &   eh ey ae\\
+9   & AA    &   aa aw ay ah\\
+10   & A0  &   ao oy ow\\
+11 & UH   &   uh uw\\
+\end{tabular}
+\label{tab:pv}
+\end{table}
+
+
+\subsection{Hidden Markov Models}
 
 A Markov model involves the transition of a particular state to other states based on transition probabilities. A future state is only depends on the current state and not the states before it. Now, consider that at every state, there would be real world observations. These observations are controlled by the emission probabilities at each state.
 
@@ -180,27 +207,25 @@ nine :N AY1 N
 
 From the transcripts, we extract all the data into a csv file using \ref{Transcripts.py}
 
-\section{Jobs}
+\subsection{Extracting Subtitles and Assigning Phonemes}
+The Corpus Grid II database contains a {\it .txt} file for each video containing the words spoken and corresponding frames for each word.  These were downloaded and extracted into Matlab using the {\it textscan} function in Matlab.  The words were deconstructed into phonemes, and phonemes were assigned to each frame.  The assignment of a phoneme label to each frame was done by assigning each phoneme from a word to an equal number of the video frames corresponding to each word. 
 
-This section is where we see the stuff to do.
-
-\begin{itemize}
-	\item lip tracking using color classification (Ronan)
-	\item figures of edge tracking for the report 
-	\item Getting the transition probabilities between phonemes (Jithin)
-	\item Getting a feature space for each phoneme.
-	\subitem Code to extract all the output from the subtitles file. (Extract words and times)
-	\subitem Code to guess how to split phonemes for each word 
-	\subitem Code to align and crop lips 
-	\subitem Code to split aligned lips to match phonemes
-	\item Something with nnets.
-\end{itemize}
+\subsection{Classification}
+The data matrix was created by reshaping each frame in each video in to a single column.  When each column was reshaped, its saved phoneme was checked, and the corresponding viseme index was saved to create the labels for a classification algorithm. The columns for each video frame were then concatenated in order to form the data matrix.  The singular value decomposition was computed of the matrix of video frames.  Classification was performed on first 30 columns of the $V$ matrix using both a Naive Bayes and a k-nearest neighbors algorithm.  Classification was done with a random $75\%$ of the data used for training and the remaining $25\%$ of the data for cross validation.
 
 \section{Computational Results}
 
+\subsection{Classification}
+For phoneme identification, the classification using a k-nearest neighbors algorithm only $11.6103\%$ accuracy on average on the cross validation over 176 trials.  For viseme identification, the k-nearest neighbors method had $19.7355\%$ accuracy over 30 trials.  More trials were not performed due to the Matlab {\it knnsearch} function being computationally intensive.  
+
+The naive bayes classification algorithm applied to identificaiton of phonemes had an average accuracy of $3.49\%$ over 1000 trials.  For viseme classification, the naive bayes algorithm had an average accuracy of $9.1357\%$ over 1000 trials.  
+
 \section{Summary and Conclusions}
 
-Further step and modifications.
+This report detailed the classification of phonemes and visemes based upon visual data of a person speaking, and speech prediction based upon identified phonemes and visemes using Hidden Markov Models.  This is a complex problem that is typically handled by a Long Short-Term Memory (LSTM) recurrent neural network.  The results presented here seem very poor, but considering the complex nature of the problem, the results are reasonable.  
+
+The best way to improve the results in this project is to improve the lip detection.  The videos used in this project were of low quality, making the accurate detection of lip contours difficult.  The database used has higher quality versions of the videos, however high quality videos are $\approx 2.4$ Gb each, for a total of 2.4 Terabytes of data for the whole data set.  This is an unrealistic amount of data for the hardware available for this project.  Another short coming of this project is the assignment of an equal number video frames to each phoneme from the given frame locations of each word.  This is a poor way to determine which phoneme is being spoken in each video frame.  Results could have further been improved with a more sophisticated classification algorithm, for instance a classification tree or neural network.  
+
 
 
 
@@ -212,7 +237,9 @@ Further step and modifications.
 	\bibitem{key-4}Yang, Jie, and Yangsheng Xu. Hidden markov model for gesture recognition. No. CMU-RI-TR-94-10. CARNEGIE-MELLON UNIV PITTSBURGH PA ROBOTICS INST, 1994.
 
 	\bibitem{key-5}Starner, Thad E. Visual Recognition of American Sign Language Using Hidden Markov Models. MASSACHUSETTS INST OF TECH CAMBRIDGE DEPT OF BRAIN AND COGNITIVE SCIENCES, 1995.
-	
+	\bibitem{key-6}Hassanat, Ahmad B., `Visual Words for Automatic Lip- Reading.' PhD diss., University of Buckingham, 2009.
+	\bibitem{key-7}J. Zhong, W. Chou, and E. Petajan, `Acoustic Driven Viseme Identification for Face Animation.' Bell Laboratories. Murray Hill, NJ. IEEE 0-7803-378. Aug. 1997.
+	\bibitem{key-8}L. Cappelletta and N. Harte. `Phoneme-to-Viseme Mapping for Visual Speech.' Department of Electronic and Electrical Engineering, Trinity College Dublin, Ireland. May 2012.
 
 \end{thebibliography}
 
@@ -243,6 +270,174 @@ fudgeFactor = .5;
 BWs = edge(A,'sobel', threshold * fudgeFactor);
 figure, imshow(BWs), title('binary gradient mask');
 \end{lstlisting}
+
+\subsection{Assign Labels}
+\begin{lstlisting}[style=myMatlabstyle]
+function [ labels ] = assignlabels2(cropvid,frameLocs,words)
+%UNTITLED10 Summary of this function goes here
+%   Detailed explanation goes here
+%Inputs: 
+%cropped videos (struct)
+%frameLocs
+% words
+% 
+% 
+% Outputs:
+% labels: cell array of cells containing the phoneme at each frame
+%
+%Begin Function
+
+numVids = length(cropvid);
+
+labels = cell(numVids,1);
+
+for k = numVids:-1:1
+    v = cropvid{k};
+    fL = floor(frameLocs{k}/1000);
+    lab = cell(size(v,3),1);
+    for j = 1:length(fL)-1
+        %Break this word into phonemes
+        ph = assignphoneme(words{k}(j));
+        %Get number of phonemes in this word
+        numPh = length(ph);
+        %get frame indices for this word to be distributed accross
+        x1 = fL(j);
+        x2 = fL(j+1);
+        %number of frames per phoneme
+        nf = round((x2-x1)/numPh);
+        xprev = x1;
+        if xprev == 0
+            xprev = 1; %make sure 0 index isnt called
+        end
+        for i = 1:numPh-1
+            xnext = xprev + nf; %overwrite next
+            for ii = xprev:xnext-1
+                lab{ii} = ph{i};
+            end
+            xprev = xnext; %overwrite prev
+        end
+        for ii = xprev:size(v,3)
+            lab{ii} = ph{end};
+        end
+    end
+    labels{k} = lab; %store in output
+    clear lab %clear temp variable
+end
+end
+\end{lstlisting}
+
+\subsection{SVD and Classify}
+\begin{lstlisting}[style=myMatlabstyle]
+
+% Required functions:
+
+% lipcrop
+% assignlabels
+% assignphoneme
+
+%Required variables to already be in workspace:
+% 
+% frameLocs
+% words
+%Begin Script:
+
+clearvars -except lipread frameLocs words
+%% Crop, Assign Labels, create individual data matrices
+
+%Crop videos based on contour mask
+cropVid = lipcrop(lipread);
+
+%Assign labels to each frame
+labels = assignlabels2(cropVid,frameLocs,words);
+
+%Sort and create data arrays
+[X,tags,vinds] = hmmdata(cropVid,labels);
+numPix = size(X,1);
+numVids = size(X,2);
+
+%% SVD
+
+[U,S,V] = svd(X,'econ');
+
+%% Create Classification Matrices
+
+for k = 1:1000
+    q = randperm(numVids);
+    qind = round(numVids*0.75);
+    q1 = q(1:qind);
+    q2 = q(qind+1:end);
+    
+    trainData = V(q1,1:30);
+    testData = V(q2,1:30);
+    trainTags = tags(q1)';
+    testTags = tags(q2)';
+    
+    hmmNBdata = V(:,1:30);
+    
+    nb = NaiveBayes.fit(trainData,trainTags);
+    pre = nb.predict(testData);
+    
+    acc(k) = 100*sum(pre==testTags)/length(pre);
+end
+
+%compute accuracy
+
+%disp(['Accuracy was ' num2str(acc) '%'])
+
+knnind = knnsearch(trainData,testData);
+acc2 = 100*sum(knnind==testTags)/length(knnind);
+% disp(['Accuracy was ' num2str(acc2) '%'])
+
+\end{lstlisting}
+
+\subsection{Creation of Data Matrix and Classification Labels}
+\begin{lstlisting}[style=myMatlabstyle]
+function [X,tags,vinds] = hmmdata(cropVid,labels)
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+
+kmax =size(cropVid{1}(:,:,:),3);
+numPix = size(cropVid{1}(:,:,:),1)*size(cropVid{1}(:,:,:),2);
+numVids = kmax*length(cropVid);
+
+%Initialize Data Matrix
+counter = 1;
+vinds = cell(length(cropVid),1);
+X = zeros(numPix,36749);
+for j = length(cropVid):-1:1
+    thisLab = labels{j};
+    thisVid = cropVid{j}(:,:,:);
+    numv = 1;
+    for k = 1:size(thisVid,3)
+        %Get DM index of this phoneme
+        phonemeInd = checkviseme(thisLab(k));
+        
+        %If SIL, store in SIL array
+        if phonemeInd <= 0
+            continue
+        end
+        %this phoneme is a regular phoneme:
+        
+        %Increment to store in right place
+        
+        %Get Frame to store
+        thisFrame = thisVid(:,:,k);
+        
+        %Reshape frame
+        xframe = reshape(thisFrame,numPix,1);
+        
+        %Store frame in corresponding DM
+        X(:,counter) = xframe;
+        tags(counter) = phonemeInd;
+        vinds{j}(numv) = counter;
+        counter = counter +1;
+        numv = numv + 1;
+    end
+end
+end
+\end{lstlisting}
+
+
 
 \section{Python Code}
 

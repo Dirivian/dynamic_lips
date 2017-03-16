@@ -35,7 +35,7 @@ cropVid = lipcrop(lipread);
 labels = assignlabels2(cropVid,frameLocs,words);
 
 %Sort and create data arrays
-[Y,sizeData,SIL,sizeSil,numPix] = datamatrix(cropVid,labels);
+[Y,sizeData,SIL,sizeSil,numPix,hmmData,hmmInds] = datamatrix(cropVid,labels);
 
 
 %% Create Total Data Matrix and classification labels
@@ -102,15 +102,15 @@ end
 nb = NaiveBayes.fit(train,trainTags);
 pre = nb.predict(test);
 
-knnind = knnsearch(train,test);
-acc2 = 100*sum(knnind==testTags)/length(knnind);
 
 
 %compute accuracy
 acc = 100*sum(pre==testTags)/length(pre);
 disp(['Accuracy was ' num2str(acc) '%'])
-disp(['Accuracy was ' num2str(acc2) '%'])
 
+% knnind = knnsearch(train,test);
+% acc2 = 100*sum(knnind==testTags)/length(knnind);
+% disp(['Accuracy was ' num2str(acc2) '%'])
 
 %% HMM
 
