@@ -218,7 +218,71 @@ The data matrix was created by reshaping each frame in each video in to a single
 \subsection{Classification}
 For phoneme identification, the classification using a k-nearest neighbors algorithm only $11.6103\%$ accuracy on average on the cross validation over 176 trials.  For viseme identification, the k-nearest neighbors method had $19.7355\%$ accuracy over 30 trials.  More trials were not performed due to the Matlab {\it knnsearch} function being computationally intensive.  
 
-The naive bayes classification algorithm applied to identificaiton of phonemes had an average accuracy of $3.49\%$ over 1000 trials.  For viseme classification, the naive bayes algorithm had an average accuracy of $9.1357\%$ over 1000 trials.  
+The naive bayes classification algorithm applied to identificaiton of phonemes had an average accuracy of $3.49\%$ over 1000 trials.  For viseme classification, the naive bayes algorithm had an average accuracy of $9.1357\%$ over 1000 trials. 
+
+\subsection{HMM}
+
+\begin{center}
+\begin{tabular}{ |l|l|l| }
+	\hline
+	\multicolumn{3}{ |c| }{Word Classification using 37 phonemes} \\
+	\hline
+	Word & Set & Accuracy\\ \hline
+	bin & bin , blue & 87.5 \% \\
+	blue & bin, blue &  36 \% \\
+	blue & red, blue & 76 \% \\
+	four & four, white & 60 \% \\
+	bin & bin , white & 62.5 \%  \\
+	five & blue , five & 60 \%  \\
+	red & red , eight & 72 \% \\ \hline
+bin & bin , blue, green & 75 \% \\
+green &  green, white, five & 44 \% \\ \hline
+five &  five, blue, four, white & 50 \%  \\
+green &  green, white, five, red & 28 \%  \\
+bin & bin , blue, green , red & 75 \% \\
+bin & bin , blue, red, white & 56.2 \% \\
+blue & bin , blue, red, white & 28 \% \\	
+five & four , five, red, white & 45 \% \\
+\hline
+bin & bin , blue, green , red, eight & 75 \% \\	
+bin & bin , blue, green , red, white & 50 \% \\	
+four & four , five, green , red, white & 30 \% \\
+five & four , five, green , red, white & 40 \% \\	
+	\hline
+\end{tabular}
+\end{center} 
+
+
+\begin{center}
+	\begin{tabular}{ |l|l|l| }
+		\hline
+		\multicolumn{3}{ |c| }{Word Classification using 11 Visemes} \\
+		\hline
+		Word & Set & Accuracy\\ \hline
+		bin & bin , blue & 50 \% \\
+		blue & bin, blue &  68 \% \\
+		blue & red, blue & 92 \% \\
+		four & four, white & 60 \% \\
+		bin & bin , white & 68.8 \%  \\
+		five & blue , five & 60 \%  \\
+		red & red , eight & 65 \% \\ \hline
+		bin & bin , blue, green & 75 \% \\
+		red & red , white, green & 35 \% \\
+		green &  green, white, five & 44 \% \\ \hline
+		five &  five, blue, four, white & 50 \%  \\
+		green &  green, white, five, red & 28 \%  \\
+		bin & bin , blue, green , red & 75 \% \\
+		bin & bin , blue, red, white & 56.2 \% \\
+		blue & bin , blue, red, white & 68 \% \\	
+		five & four , five, red, white & 45 \% \\
+		\hline
+		bin & bin , blue, green , red, eight & 75 \% \\	
+		bin & bin , blue, green , red, white & 50 \% \\	
+		four & four , five, green , red, white & 30 \% \\
+		five & four , five, green , red, white & 40 \% \\	
+		\hline
+	\end{tabular}
+\end{center}
 
 \section{Summary and Conclusions}
 
