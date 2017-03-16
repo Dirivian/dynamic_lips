@@ -86,11 +86,11 @@ testmov = 1; %movie to test
   
   %% color classification results
   figure(1); 
-   testmov = 1:length(lipread);
+   testmov = 1:3;
    for j=1:length(testmov)
   for i =1:74
      currentframe = 255* lipcolor(:,:,i,j);
-     subplot(2,1,1)
+     subplot(2,1,1);
      imshow(currentframe); %can change this constant
      subplot(2,1,2); 
      currentframe = lipread(j).mov(:,:,:,i); 
