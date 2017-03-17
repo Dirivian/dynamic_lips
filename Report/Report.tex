@@ -219,8 +219,12 @@ The naive bayes classification algorithm applied to identificaiton of phonemes h
 
 \subsection{Word Classification using HMMs}
 
-The identification of the right word definitely depends on the words it is compared against.
+The identification of the right word definitely depends on the words it is compared against. For this purpose, the results are presented in \ref{tab:phoneme} and \ref{tab:viseme} show the word to be detected, the other words and its accuracy.
 
+Using the phoneme classification, the results seem to be good in general. Although the accuracy does go down with more words, it is still very good and definitely better than random guessing in most cases.
+
+\begin{table}[]
+	\caption{Classifying words after classifying frames into phonemes}
 \begin{center}
 \begin{tabular}{ |l|l|l| }
 	\hline
@@ -250,8 +254,13 @@ five & four , five, green , red, white & 40 \% \\
 	\hline
 \end{tabular}
 \end{center} 
+\label{tab:phoneme}
+\end{table}
 
+We notice now that the best identified words by the viseme classification might not be the same as those by the phoneme classification. The word "bin" is an example which is easily identified by the phoneme classification but not so well when the states are visemes. In contrast, the word "blue" is better identified now. On exploring the viseme assignment, the viseme 11 was quite over-assigned which might have played a role. The results are still very good for the viseme classification. 
 
+\begin{table}[]
+	\caption{Classifying words after classifying frames into visemes}
 \begin{center}
 	\begin{tabular}{ |l|l|l| }
 		\hline
@@ -284,23 +293,31 @@ five & four , five, green , red, white & 40 \% \\
 		\hline
 	\end{tabular}
 \end{center}
+\label{tab:viseme}
+\end{table}
 
+
+
+Although there were a few more words and many more permutations to try out, we restricted ourselves to these selected ones under the time constraints.
 \section{Relevant Links }
 
-We have only included the most important parts of our code in this report because the number of lines for the code are between 1700-2000. All the code, the report and some very useful .mat files can be found on our GitHub repository  : \url{https://github.com/Dirivian/dynamic_lips}.
+All the code, the report and some very useful .mat files can be found on our GitHub repository  : \url{https://github.com/Dirivian/dynamic_lips}.
 
 The database for our videos can be obtained here: \url{http://spandh.dcs.shef.ac.uk/gridcorpus/}. The main database under which we found is here: \url{http://www.ee.surrey.ac.uk/Projects/LILiR/datasets.html}.
  
 
 \section{Limitations and Future Directions}
 
-Finding bottlenecks during one attempt enables us to devise ways to evade them next time. There are a number of ways we could improve.
+Finding bottlenecks during one attempt enables us to devise ways to evade them next time. There are a number of ways we could improve upon.
 \begin{itemize}
 	\item The best way to improve the results in this project is to improve the lip detection.  The videos used in this project were of low quality, making the accurate detection of lip contours difficult.  The database used has higher quality versions of the videos, however high quality videos are $\approx 2.4$ Gb each, for a total of 2.4 Terabytes of data for the whole data set.  This is an unrealistic amount of data for the hardware available for this project.
 	\item Another short coming of this project is the assignment of an equal number of video frames to each phoneme from the given frame locations of each word.  This is a poor way to determine which phoneme is being spoken in each video frame. If we had a dataset in which we had frames corresponding to each phoneme, the accuracy would easily increase.
 	\item In the phoneme classification, we used only naive bayes and k-nearest neighbours. Even though, knn gave us high accuracy, it was computationally expensive and we did not have sufficient time to classify the whole dataset. That is one direction to move ahead. Results could have further been improved with a more sophisticated classification algorithm, for instance a classification tree or neural network.
 	\item Apart from Hidden Markov Models, Recurrent Neural Networks are widely popular for activities that involve sequential events and memory. TensorFlow has a great RNN package in Python which is worth exploring.
 	\item Kevin Murphy's HMM toolbox is widely popular as the best HMM toolbox in Matlab. However, it cannot handle sequences of different length during training. We worked around this problem by using stop states and chopping the sequence off. But that is far from a perfect fix. Searching for better toolboxes or making our own scripts to do the E-M step of the algorithm is a better idea. 
+	\item We used 37 phonemes in our classification. That is a tall order for any classifier. By using 11 visemes, we tried to cut this down. This can be better improved choosing the sets to group together. Unsupervised learning could be a good option to experiment on to find good clusters.
+	
+	\item HMMs are trained using an initial guess. If we could figure out a way to get a good initial guess especially in the context of phonemes/visemes in speech, there would be a huge improvement.	
 \end{itemize}
  
 
