@@ -7,6 +7,8 @@
 \usepackage{color}
 \usepackage{float}
 \usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 \definecolor{keywords}{RGB}{255,0,90}
 \definecolor{comments}{RGB}{0,0,113}
 \definecolor{red}{RGB}{160,0,0}
@@ -59,9 +61,9 @@
 \lstset{language=Python,frame=single}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage[scale=0.75]{geometry}
-	\title{Estimating speech from lip movement}
+	\title{Estimating speech from lip dynamics}
 
-\author{Jithin D. George, Ronan Keane, Conor Zellmer}
+\author{Jithin George, Ronan Keane, Conor Zellmer}
 
 \date{\today}
 
@@ -69,39 +71,29 @@
 \maketitle
 
 \begin{abstract}
-The goal of this project is to develop a limited lip reading algorithm for a subset of the english language. We consider a scenario in which no audio information is available. We first develop a method for processing raw video and extracting the position of the lips in each frame. We then prepare the lip data for processing and classify the lips into visemes and phonemes. We then use Hidden Markov Models to predict the words the speaker is saying based on  the classification. We use the GRID audiovisual sentence corpus database for our study. 
+The goal of this project is to develop a limited lip reading algorithm for a subset of the English language. We consider a scenario in which no audio information is available. The raw video is processed and the position of the lips in each frame is extracted. We then prepare the lip data for processing and classify the lips into visemes and phonemes. Hidden Markov Models are used to predict the words the speaker is saying based on the sequences of classified phonemes and visemes. The GRID audiovisual sentence corpus \cite{key-10}\cite{key-11} database is used for our study. 
 \end{abstract}
 
 \section{Introduction and Overview}
 \label{sec:introduction}
 
+The capacity of machines to learn and understand this world grows daily. Many of their feats surpass human limits. Every day, they reveal incredible abilities that were thought impossible before. One such example is \cite{key-1} where audio could be retrieved from a video by analyzing minute vibrations of objects in it ranging from a glass of water to a bag of chips. We have a much more humble goal of extracting the spoken words from the visuals in a video.
 
-We consider 4 different algorithms for extracting the lip position. \begin{itemize}
-	\item Active Contour Mask (Matlab built in)
-	\item Dynamic Mode Decomposition 
-	\item Edge Detection (Matlab built in)
-	\item Color Classification
-\end{itemize}
-We apply these techniques on a group of 1000 videos of a single speaker from the GRID audiovisual sentence corpus database. Each video is 3 second long and contains the speaker saying a number of nonsense phrases. The phrases spoken are chosen to convey a variety of sounds and therefore lip positions.
 
-\begin{figure}[H] 
-	\centering
-%	\includegraphics[width=0.7\textwidth]{active}
-	\caption{Active Contour}	
-\end{figure}
+This is an attempt to use classification algorithms and Hidden Markov Models to perform visual speech recognition.  Videos from the GRID Audiovisual Sentence Corpus database \cite{key-10}\cite{key-11}  are used in the project. The GRID database contains a set of 1000 videos of a single speaker. Each video is approximately 3 seconds in length, and contains a man speaking a collection of words chosen to encompass each sound possible in spoken English. The database includes transcripts of each video, with the locations of each word in the video by frame numbers.  
 
-\begin{figure}[H] 
-	\centering
-%	\includegraphics[width=0.7\textwidth]{binary}
-	\caption{Binary Gradient}	
-\end{figure}
+This report details the extraction of lip contours from each video, the identification of phonemes being spoken using classification methods, and prediction of speech using Hidden Markov Models (HMM).  The lip contours for each video frame are extracted using active contour masks, dynamic mode decomposition, edge detection and color classification. Then we use classification algorithms like naive Bayes and k-nearest neighbors to map the contours to phonemes/visemes.  Finally we use hidden Markov models to analyze sequences of classified phonemes/visemes to predict what words they are.   
+
+
+
+
 
 
 
 \section{Theoretical Background}
 \label{sec:theory}
 \subsection{Feature Extraction}
-Lip reading is a complicated task and there are no "go-to" algorithms for detecting and tracking the position of an individual's lips. We can use Matlab's built in active contour and edge detection to hope to do background/foreground seperation on the video. We can also use DMD to do background/foreground seperation. The assumption is the speaker's face is stationary enough that it is possible to detect the lips as the foreground. In practice, this is not the case. We can also classify the pixel colors of the video frames and segment the lips based on the idea that the speaker's lip color is different from their skin color. For color classification, we can project the pixel color into the LAB color space to acheive better classification results. In either of these different strategies we also need to isolate the general mouth region of the speaker so that we will not also detect eyes, nose, etc.
+Lip reading is a complicated task and there are no "go-to" algorithms for detecting and tracking the position of an individual's lips. We can use Matlab's built in active contour and edge detection to hope to do background/foreground separation on the video. We can also use DMD to do background/foreground separation. The assumption is the speaker's face is stationary enough that it is possible to detect the lips as the foreground. In practice, this is not the case. We can also classify the pixel colors of the video frames and segment the lips based on the idea that the speaker's lip color is different from their skin color. For color classification, we can project the pixel color into the LAB color space to achieve better classification results. In either of these different strategies we also need to isolate the general mouth region of the speaker so that we will not also detect eyes, nose, etc.
 \subsection{Phonemes and Visemes}
 Phonemes are the smallest identifiable sound unit in the sound system of a language. $^{[6]}$  According to Zhong, et al, phonemes are ``basic sound segments that carry linguistic distinction.''$^{[7]}$ In theory, visemes are the analogous basic units in the visual domain.  However, there is no agreement on a common definition for visemes in practice$^{[8]}$.  In audio speech recognition, phonemes are detected and used to reconstruct speech.  In visual speech recognition, only visemes can be detected.  Phonemes for the basis for a spoken language, and hence automated lipreading typically employs a mapping from phonemes to visemes.  Many such mapping can be found in the literature, but all suffer from the issue of there being more phonemes than visemes, resulting in a many-to-one map.$^{[8]}$  For instance, this project uses 37 phonemes and 11 visemes. See Table (\ref{tab:pv}) for the phoneme to viseme map used in this project.  
 
@@ -136,7 +128,7 @@ For example, if we were to represent the ever changing weather, the states would
 
 We look at Hidden Markov Models(HMM). We decide that this is a relevant model because the words spoken are those defined by language and thus occur in specific pattern and not randomly. For example, given the first letter of word 'k', the probability that the next letter is a vowel is much higher than it being a consonant. A machine learning algorithm without this would be as inefficient as the initial Enigma machine in the movie "The Imitation Game". HMMs are very popular in the fields of speech \cite{key-2} and gesture recognition \cite{key-4} \cite{key-5}.
 
-Although HMMs have fascinating problems related to evaluation and learning, our interests are in decoding. We have a sequence of observations and our aim is to estimate the states that created that. The Viterbi algorithm \cite{key-3} gives us the states that maximize the occurrence of the observations. 
+Although HMMs have fascinating problems related to evaluation and decoding, our interests are in learning. We have a sequence of observations and our aim is to estimate the transition and observation matrices that created that. The Baum-Welch algorithm \cite{key-3} gives us that and we train a transition and observation matrix for each word by using sequences corresponding to different instances of that word. In our weather example, we could take the sequences of weather in a few city and train an HMM to find which city produces a test sequence of weather. A month of sunshine is unlikely to be Seattle but California would be a better guess.
 
 So, given the features from the videos, we find the states. The states are the units of words, here chosen to be phonemes. 
 \section{Implementation and Development}
@@ -203,12 +195,12 @@ The data matrix was created by reshaping each frame in each video in to a single
 
 Once a phoneme classifier has been created, we apply it onto the whole dataset of 1000 videos to obtain 1000 phoneme sequences of length 74. If we use phonemes, we will get sequences of numbers which are between 1 and 37. If we use visemes, we get sequences with numbers between 1 and 11.
 
-Our objective is to map sequence of phonemes/visemes to words. This is where we utilise the capability of Hidden Markov Models to incorporate the temporal dynamics of the phoneme changes and thus "remember". So, even if our phoneme classification is erroneous, the patterns generated by the classifier can be mapped onto words resulting in higher accuracy.
+Our objective is to map sequence of phonemes/visemes to words. This is where we utilize the capability of Hidden Markov Models to incorporate the temporal dynamics of the phoneme changes and thus "remember". So, even if our phoneme classification is erroneous, the patterns generated by the classifier can be mapped onto words resulting in higher accuracy.
 
 We have the 1000 sequences.From the video dataset, \ref{binsorter.m} extracts sequences corresponding to each word (using regular expressions).
 This leaves us with a list of sequences for each word. For each word, the list is divided up into training and test sets. We train an HMM for each word. This means that each word has a unique transition matrix and observation matrix associated with it. All the training is done in \ref{makethehmm2.m}. The functions used for training the HMM are from Kevin Murphy's HMM toolbox \cite{key-9}.
 
-Then, when we have an unknown sequence, we run it through the HMMs of all the words and find the "loglikelihood" that it might be that word. When we find the HMM for which it has the highest "loglikelihood", it means that the sequence is most likely to be the word associated with that HMM.
+Then, when we have an unknown sequence, we run it through the HMMs of all the words and find the "loglikelihood" that it might be that word. When we find the HMM for which it has the highest "loglikelihood", it means that the sequence is most likely to be the word associated with that HMM. The results are estimated using \ref{resultshmm.m}.
 
 \section{Computational Results}
 
@@ -257,7 +249,7 @@ five & four , five, green , red, white & 40 \% \\
 \label{tab:phoneme}
 \end{table}
 
-We notice now that the best identified words by the viseme classification might not be the same as those by the phoneme classification. The word "bin" is an example which is easily identified by the phoneme classification but not so well when the states are visemes. In contrast, the word "blue" is better identified now. On exploring the viseme assignment, the viseme 11 was quite over-assigned which might have played a role. The results are still very good for the viseme classification. 
+We notice that the best identified words by the viseme classification might not be the same as those by the phoneme classification. The word "bin" is an example which is easily identified by the phoneme classification but not so well when the states are visemes. In contrast, the word "blue" is better identified now. On exploring the viseme assignment, the viseme 11 was quite over-assigned which might have played a role. The results are still very good for the viseme classification. 
 
 \begin{table}[]
 	\caption{Classifying words after classifying frames into visemes}
@@ -299,37 +291,34 @@ We notice now that the best identified words by the viseme classification might 
 
 
 Although there were a few more words and many more permutations to try out, we restricted ourselves to these selected ones under the time constraints.
-\section{Relevant Links }
+\newpage
 
-All the code, the report and some very useful .mat files can be found on our GitHub repository  : \url{https://github.com/Dirivian/dynamic_lips}.
 
-The database for our videos can be obtained here: \url{http://spandh.dcs.shef.ac.uk/gridcorpus/}. The main database under which we found is here: \url{http://www.ee.surrey.ac.uk/Projects/LILiR/datasets.html}.
- 
+\section{Summary and Conclusions}
 
-\section{Limitations and Future Directions}
 
-Finding bottlenecks during one attempt enables us to devise ways to evade them next time. There are a number of ways we could improve upon.
+Finding bottlenecks during our attempt enables others to devise ways to evade them next time. There are a number of things we could improve upon.
 \begin{itemize}
-	\item The best way to improve the results in this project is to improve the lip detection.  The videos used in this project were of low quality, making the accurate detection of lip contours difficult.  The database used has higher quality versions of the videos, however high quality videos are $\approx 2.4$ Gb each, for a total of 2.4 Terabytes of data for the whole data set.  This is an unrealistic amount of data for the hardware available for this project.
+	\item The best way to improve the results in this project is to improve the lip detection.  The videos used in this project were of low quality, making the accurate detection of lip contours difficult.  The database used has higher quality versions of the videos. However high quality videos are $\approx 2.4$ GB each, for a total of 2.4 Terabytes of data for the whole data set.  This is an unrealistic amount of data for the hardware available for this project.
 	\item Another short coming of this project is the assignment of an equal number of video frames to each phoneme from the given frame locations of each word.  This is a poor way to determine which phoneme is being spoken in each video frame. If we had a dataset in which we had frames corresponding to each phoneme, the accuracy would easily increase.
-	\item In the phoneme classification, we used only naive bayes and k-nearest neighbours. Even though, knn gave us high accuracy, it was computationally expensive and we did not have sufficient time to classify the whole dataset. That is one direction to move ahead. Results could have further been improved with a more sophisticated classification algorithm, for instance a classification tree or neural network.
+	\item In the phoneme classification, we used only naive bayes and k-nearest neighbours. Even though, knn gave us high accuracy, it was computationally expensive and we did not have sufficient time to classify the whole dataset. Results could have further been improved with a more sophisticated classification algorithm, for instance a classification tree or neural network.
 	\item Apart from Hidden Markov Models, Recurrent Neural Networks are widely popular for activities that involve sequential events and memory. TensorFlow has a great RNN package in Python which is worth exploring.
 	\item Kevin Murphy's HMM toolbox is widely popular as the best HMM toolbox in Matlab. However, it cannot handle sequences of different length during training. We worked around this problem by using stop states and chopping the sequence off. But that is far from a perfect fix. Searching for better toolboxes or making our own scripts to do the E-M step of the algorithm is a better idea. 
 	\item We used 37 phonemes in our classification. That is a tall order for any classifier. By using 11 visemes, we tried to cut this down. This can be better improved choosing the sets to group together. Unsupervised learning could be a good option to experiment on to find good clusters.
 	
-	\item HMMs are trained using an initial guess. If we could figure out a way to get a good initial guess especially in the context of phonemes/visemes in speech, there would be a huge improvement.	
+	\item HMMs are trained using an initial guess of the transition and observation matrices. If we could figure out a way to get a good initial guess especially in the context of phonemes/visemes in speech, there would be a huge improvement.
+	
+	\item Lastly, 1000 videos would correspond to around 200 instances for the average word. This is not a particularly large sample size. So, using more videos will lead to better results.		
 \end{itemize}
- 
-
-\section{Summary and Conclusions}
-
-This report detailed the classification of phonemes and visemes based upon visual data of a person speaking, and speech prediction based upon identified phonemes and visemes using Hidden Markov Models.  This is a complex problem that is typically handled by a Long Short-Term Memory (LSTM) recurrent neural network.  The results presented here seem very poor, but considering the complex nature of the problem, the results are reasonable. 
 
 
+Given an unknown video sequence where only the words in our dictionary are spoken, we have a technique to identify the words spoken to a good level of accuracy. We also have a good exposure to top tier methods for image processing, classification and hidden markov models as well as their limitations. The project was also a good example of collaborative research and use modern day tools like Git for version control and to speed up progress. All the code, the report and some very useful .mat files can be found on our GitHub repository \cite{key-12}.
+
+\newpage
 \begin{thebibliography}{1}
-	\bibitem{key-1}J. Proctor, S. Brunton and J. N. Kutz, Dynamic mode decomposition with control, arXiv:1409.6358.
+	\bibitem{key-1}Davis, Abe, et al. "The visual microphone: passive recovery of sound from video." (2014)..
 	\bibitem{key-2}Rabiner, Lawrence R. "A tutorial on hidden Markov models and selected applications in speech recognition." Proceedings of the IEEE 77.2 (1989): 257-286.	
-	\bibitem{key-3}Forney, G. David. "The viterbi algorithm." Proceedings of the IEEE 61.3 (1973): 268-278.
+	\bibitem{key-3}Choi, Kyoung Ho, and Jenq-Neng Hwang. "Baum-welch hidden Markov model inversion for reliable audio-to-visual conversion." Multimedia Signal Processing, 1999 IEEE 3rd Workshop on. IEEE, 1999.
 	
 	\bibitem{key-4}Yang, Jie, and Yangsheng Xu. Hidden markov model for gesture recognition. No. CMU-RI-TR-94-10. CARNEGIE-MELLON UNIV PITTSBURGH PA ROBOTICS INST, 1994.
 
@@ -338,8 +327,10 @@ This report detailed the classification of phonemes and visemes based upon visua
 	\bibitem{key-7}J. Zhong, W. Chou, and E. Petajan, `Acoustic Driven Viseme Identification for Face Animation.' Bell Laboratories. Murray Hill, NJ. IEEE 0-7803-378. Aug. 1997.
 	\bibitem{key-8}L. Cappelletta and N. Harte. `Phoneme-to-Viseme Mapping for Visual Speech.' Department of Electronic and Electrical Engineering, Trinity College Dublin, Ireland. May 2012.
 	
-	\bibitem{key-9} https://www.cs.ubc.ca/~murphyk/Software/HMM/hmm.html
-
+	\bibitem{key-9}\url{https://www.cs.ubc.ca/~murphyk/Software/HMM/hmm.html}
+	\bibitem{key-10}\url{http://spandh.dcs.shef.ac.uk/gridcorpus/}
+	\bibitem{key-11}\url{http://www.ee.surrey.ac.uk/Projects/LILiR/datasets.html}
+	\bibitem{key-12}\url{https://github.com/Dirivian/dynamic_lips}
 \end{thebibliography}
 
 \newpage
@@ -583,6 +574,265 @@ placemat(placemat==0)=4;
 [LL, priorplace, transmatplace, obsmatplace] = dhmm_em(placemat, prior1, transmat1, obsmat1, 'max_iter', 500);
 \end{lstlisting}
 
+
+\subsection{resultshmm.m}
+\label{resultshmm.m}
+\begin{lstlisting}[style=myMatlabstyle]
+clear resultg31 resultg32 resultg4 resultbl21 resultbl22 resultbl4 resultr3 resultr2 resultb21 resultb22 resultb3 resultb41 resultb42 resultb51 resultb52 resultfour2 resultfour3 resultfour5 resultfive2 resultfive41 resultfive42 resultfive5;
+resg31 =0;
+resg32 =0;
+resg4 =0;
+resbl21 =0;
+resbl22 =0;
+resbl4 =0;
+resr3 =0;
+resr2 =0;
+resb21 =0;
+resb22=0;
+resb3 =0;
+resb41 =0;
+resb42 =0;
+resb51 =0;
+resb52 =0;
+resfour2 =0;
+resfour3 =0;
+resfour5 =0;
+resfive2 =0;
+resfive41 =0;
+resfive42 =0;
+resfive5 =0;
+dimend =225;
+for i = 201:225
+
+k = greenmatrix(i,1:6);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkg31 = [ loglikwhite ; loglikgreen;  loglikfive  ];
+lllkg32 = [ loglikwhite ; loglikgreen;  loglikblue  ];
+lllkg4 = [ loglikwhite ; loglikgreen;  loglikfive ; loglikred  ];
+if loglikgreen ==max(lllkg31)
+resultg31(i-200)=1;
+resg31 = resg31+1;
+else
+resultg31(i-200)=0;
+end
+if loglikgreen ==max(lllkg32)
+resultg32(i-200)=1;
+resg32 = resg32+1;
+else
+resultg32(i-200)=0;
+end
+if loglikgreen ==max(lllkg4)
+resultg4(i-200)=1;
+resg4 = resg4+1;
+else
+resultg4(i-200)=0;
+end
+
+k = bluematrix(i,1:7);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkbl21 = [ loglikbin ; loglikblue;   ];
+lllkbl22 = [ loglikred ; loglikblue;   ];
+lllkbl4 = [ loglikwhite ; loglikred;loglikbin ; loglikblue;  ];
+
+if loglikblue ==max(lllkbl21)
+resultbl21(i-200)=1;
+resbl21 = resbl21+1;
+else
+resultbl21(i-200)=0;
+end
+if loglikblue ==max(lllkbl22)
+resultbl22(i-200)=1;
+resbl22 = resbl22+1;
+else
+resultbl22(i-200)=0;
+end
+if loglikblue ==max(lllkbl4)
+resultbl4(i-200)=1;
+resbl4 = resbl4+1;
+else
+resultbl4(i-200)=0;
+end
+
+k = redmatrix(i,1:6);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkr2 = [ loglikred ; loglikeight;   ];
+lllkr3 = [ loglikwhite ; loglikgreen;  loglikred  ];
+if loglikred==max(lllkr2)
+resultr2(i-200)=1;
+resr2 = resr2+1;
+else
+resultr2(i-200)=0;
+end
+if loglikred==max(lllkr3)
+resultr3(i-200)=1;
+resr3 = resr3+1;
+else
+resultr3(i-200)=0;
+end
+end
+
+for i = 201:216
+
+k = binmatrix(i,1:6);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkb21 = [ loglikbin ; loglikblue;  ];
+lllkb22 = [ loglikbin ; loglikwhite;  ];
+lllkb3 = [ loglikbin ; loglikblue; loglikgreen;  ];
+lllkb41 = [ loglikbin ; loglikgreen;  loglikblue ; loglikred  ];
+lllkb42 = [ loglikbin ; loglikwhite;  loglikblue ; loglikred  ];
+lllkb51 = [ loglikbin ; loglikgreen;  loglikblue ; loglikred ; loglikeight ];
+lllkb52 = [ loglikbin ; loglikgreen;  loglikblue ; loglikred ; loglikeight ];
+if loglikbin ==max(lllkb21)
+resultb21(i-200)=1;
+resb21 = resb21+1;
+else
+resultb21(i-200)=0;
+end
+if loglikbin ==max(lllkb22)
+resultb22(i-200)=1;
+resb22 = resb22+1;
+else
+resultb22(i-200)=0;
+end
+if loglikbin ==max(lllkb3)
+resultb3(i-200)=1;
+resb3 = resb3+1;
+else
+resultb3(i-200)=0;
+end
+if loglikbin ==max(lllkb41)
+resultb41(i-200)=1;
+resb41 = resb41+1;
+else
+resultb41(i-200)=0;
+end
+if loglikbin ==max(lllkb42)
+resultb42(i-200)=1;
+resb42 = resb42+1;
+else
+resultb42(i-200)=0;
+end
+if loglikbin ==max(lllkb51)
+resultb51(i-200)=1;
+resb51 = resb51+1;
+else
+resultb51(i-200)=0;
+end
+if loglikbin ==max(lllkb52)
+resultb52(i-200)=1;
+resb52 = resb52+1;
+else
+resultb52(i-200)=0;
+end
+end
+
+for i = 81:100
+
+k = fourmatrix(i,1:7);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkfour2 = [ loglikfour ; loglikwhite;  ];
+lllkfour3 = [ loglikbin ; loglikfour; loglikgreen;  ];
+lllkfour5 = [loglikfive;  loglikfour; loglikgreen; loglikred;   loglikwhite;  ];
+if loglikfour ==max(lllkfour2)
+resultfour2(i-80)=1;
+resbfour2 = resfour2+1;
+else
+resultfour2(i-80)=0;
+end
+if loglikfour ==max(lllkfour3)
+resultfour3(i-80)=1;
+resbfour3 = resfour3+1;
+else
+resultfour3(i-80)=0;
+end
+if loglikfour ==max(lllkfour5)
+resultfour5(i-80)=1;
+resfour5 = resfour5+1;
+else
+resultfour5(i-80)=0;
+end
+
+
+k = fivematrix(i,1:8);
+k(k==0)=4;
+loglikbin = dhmm_logprob(k, priorbin, transmatbin, obsmatbin);
+loglikblue = dhmm_logprob(k, priorblue, transmatblue, obsmatblue);
+loglikgreen = dhmm_logprob(k, priorgreen, transmatgreen, obsmatgreen);
+loglikred = dhmm_logprob(k, priorred, transmatred, obsmatred);
+loglikwhite = dhmm_logprob(k, priorwhite, transmatwhite, obsmatwhite);
+loglikeight = dhmm_logprob(k, prioreight , transmateight , obsmateight );
+loglikfour = dhmm_logprob(k, priorfour  , transmatfour  , obsmatfour  );
+loglikfive = dhmm_logprob(k, priorfive  , transmatfive  , obsmatfive );
+lllkfive2 = [ loglikfour ; loglikwhite;  ];
+lllkfive41 = [ loglikblue ; loglikfour; loglikfive; loglikwhite;  ];
+lllkfive42 =  [ loglikred ; loglikfour; loglikfive; loglikwhite;  ];
+lllkfive5 = [loglikfive;  loglikfour; loglikgreen; loglikred;   loglikwhite;  ];
+if loglikfive ==max(lllkfive2)
+resultfive2(i-80)=1;
+resbfive2 = resfive2+1;
+else
+resultfive2(i-80)=0;
+end
+if loglikfive ==max(lllkfive41)
+resultfive41(i-80)=1;
+resbfive41 = resfive41+1;
+else
+resultfive41(i-80)=0;
+end
+if loglikfive ==max(lllkfive42)
+resultfive42(i-80)=1;
+resbfive42 = resfive42+1;
+else
+resultfive42(i-80)=0;
+end
+if loglikfour ==max(lllkfive5)
+resultfive5(i-80)=1;
+resfive5 = resfive5+1;
+else
+resultfive5(i-80)=0;
+end
+end
+\end{lstlisting}
 \subsection{binsorter.m}
 \label{binsorter.m}
 \begin{lstlisting}[style=myMatlabstyle]
